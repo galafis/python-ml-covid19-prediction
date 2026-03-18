@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  covid-prediction:
+    build: .
+    container_name: covid-ml-prediction
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./output:/app/output
+      - ./data:/app/data
+    command: ["--state", "SP", "--model-type", "all"]
+
+  test:
+    build: .
+    container_name: covid-ml-test
+    entrypoint: ["pytest"]
+    command: ["tests/", "-v", "--tb=short"]
+    environment:
+      - PYTHONPATH=/app
